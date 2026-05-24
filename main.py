@@ -1,4 +1,3 @@
-from pathlib import Path
 from config import (
     STRATEGY_FILE,
     MAX_HISTORY,

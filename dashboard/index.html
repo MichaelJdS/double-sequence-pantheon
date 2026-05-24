@@ -1,9 +1,411 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-<title>Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Double Sequence Pantheon</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-2: #0d1b2f;
+      --card: rgba(15, 27, 48, 0.88);
+      --line: rgba(93, 135, 196, 0.22);
+      --text: #e8f1ff;
+      --muted: #9bb0cf;
+      --accent: #4cc9f0;
+      --accent-2: #7b61ff;
+      --green: #10b981;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --white: #f8fafc;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(76, 201, 240, 0.10), transparent 28%),
+        radial-gradient(circle at top right, rgba(123, 97, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, #06101d 0%, #081626 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 24px;
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(17, 33, 57, 0.95), rgba(10, 21, 36, 0.88));
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      letter-spacing: 0.4px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .badge {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: rgba(255,255,255,0.03);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .col-3 { grid-column: span 3; }
+    .col-4 { grid-column: span 4; }
+    .col-6 { grid-column: span 6; }
+    .col-8 { grid-column: span 8; }
+    .col-12 { grid-column: span 12; }
+
+    .kpi-title {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .kpi-value {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 18px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .btn-red { background: var(--red); color: #fff; }
+    .btn-black { background: #111827; color: #fff; border: 1px solid #334155; }
+    .btn-white { background: var(--white); color: #111827; }
+
+    .signal-box {
+      padding: 18px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(76,201,240,.10), rgba(123,97,255,.10));
+      border: 1px solid var(--line);
+    }
+
+    .signal-label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 8px;
+    }
+
+    .signal-value {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .spin-list, .event-list {
+      display: grid;
+      gap: 10px;
+      max-height: 520px;
+      overflow: auto;
+    }
+
+    .spin-item, .event-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .spin-color, .event-title {
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .red { color: #ff6b6b; }
+    .black { color: #cbd5e1; }
+    .white { color: #ffffff; }
+
+    @media (max-width: 1100px) {
+      .col-3, .col-4, .col-6, .col-8, .col-12 {
+        grid-column: span 12;
+      }
+
+      .hero {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
 </head>
 <body>
-<h1>Dashboard</h1>
+  <div class="container">
+    <section class="hero">
+      <div>
+        <h1>Double Sequence Pantheon</h1>
+        <p>Engine de sequência com dashboard dark, sinal em tempo real, gale, proteção no branco e painel de operação.</p>
+      </div>
+      <div class="badge" id="feedStatus">Feed: carregando...</div>
+    </section>
+
+    <section class="grid">
+      <div class="card col-3">
+        <div class="kpi-title">Spins</div>
+        <div class="kpi-value" id="spinsTotal">0</div>
+      </div>
+
+      <div class="card col-3">
+        <div class="kpi-title">Estratégias</div>
+        <div class="kpi-value" id="strategiesCount">0</div>
+      </div>
+
+      <div class="card col-3">
+        <div class="kpi-title">Pendentes</div>
+        <div class="kpi-value" id="pendingSignals">0</div>
+      </div>
+
+      <div class="card col-3">
+        <div class="kpi-title">Assertividade</div>
+        <div class="kpi-value" id="accuracy">0%</div>
+      </div>
+
+      <div class="card col-8">
+        <h3 class="section-title">Último sinal</h3>
+        <div class="signal-box">
+          <div class="signal-label">Sinal ativo</div>
+          <div class="signal-value" id="lastSignal">Nenhum sinal recente</div>
+          <div class="row" style="margin-top:12px;">
+            <div class="pill" id="signalConfidence">Confiança: -</div>
+            <div class="pill" id="signalGales">Gales: -</div>
+            <div class="pill" id="signalPattern">Padrão: -</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card col-4">
+        <h3 class="section-title">Controles</h3>
+        <div class="row" style="margin-bottom:12px;">
+          <button class="btn-primary" onclick="startDemo()">Iniciar demo</button>
+          <button class="btn-secondary" onclick="stopDemo()">Parar demo</button>
+          <button class="btn-secondary" onclick="reloadStrategies()">Recarregar estratégias</button>
+        </div>
+        <div class="row">
+          <button class="btn-red" onclick="sendSpin('red')">Registrar vermelho</button>
+          <button class="btn-black" onclick="sendSpin('black')">Registrar preto</button>
+          <button class="btn-white" onclick="sendSpin('white')">Registrar branco</button>
+        </div>
+      </div>
+
+      <div class="card col-6">
+        <h3 class="section-title">Eventos</h3>
+        <div class="event-list" id="events"></div>
+      </div>
+
+      <div class="card col-6">
+        <h3 class="section-title">Últimos spins</h3>
+        <div class="spin-list" id="spins"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    async function api(url, options = {}) {
+      const response = await fetch(url, {
+        headers: { "Content-Type": "application/json" },
+        ...options
+      });
+      return response.json();
+    }
+
+    function colorName(color) {
+      const map = {
+        red: "Vermelho",
+        black: "Preto",
+        white: "Branco"
+      };
+      return map[color] || color;
+    }
+
+    function eventHtml(event) {
+      if (event.type === "signal") {
+        const s = event.payload;
+        return `
+          <div class="event-item">
+            <div class="event-title">🎯 ${s.strategy_name}</div>
+            <div class="muted">Entrada: ${colorName(s.entry_color)} | Confiança: ${(s.confidence * 100).toFixed(1)}% | Gales: ${s.gales}</div>
+            <div class="muted">Padrão: ${s.pattern.map(colorName).join(" > ")}</div>
+          </div>
+        `;
+      }
+
+      if (event.type === "result") {
+        const r = event.payload;
+        const icon = r.status === "win" ? "✅" :
+                     r.status === "gale_win" ? "🟡" :
+                     r.status === "white_win" ? "⚪" : "❌";
+        return `
+          <div class="event-item">
+            <div class="event-title">${icon} ${r.strategy_name}</div>
+            <div class="muted">Status: ${r.status} | Tentativas: ${r.attempts_used} | Saída: ${colorName(r.resolved_color)}</div>
+          </div>
+        `;
+      }
+
+      return "";
+    }
+
+    function spinHtml(spin) {
+      return `
+        <div class="spin-item">
+          <div class="spin-color ${spin.color}">${colorName(spin.color)}</div>
+          <div class="muted">Fonte: ${spin.source}</div>
+          <div class="muted">${new Date(spin.created_at).toLocaleString("pt-BR")}</div>
+        </div>
+      `;
+    }
+
+    async function refresh() {
+      const data = await api("/api/state");
+
+      document.getElementById("spinsTotal").textContent = data.stats.spins_total;
+      document.getElementById("strategiesCount").textContent = data.strategies_count;
+      document.getElementById("pendingSignals").textContent = data.stats.pending;
+      document.getElementById("accuracy").textContent = `${data.stats.accuracy}%`;
+      document.getElementById("feedStatus").textContent =
+        `Feed: ${data.feed.running ? "demo ativo" : "parado"} | intervalo ${data.feed.interval_seconds}s`;
+
+      const eventsEl = document.getElementById("events");
+      eventsEl.innerHTML = data.events.map(eventHtml).join("") || `<div class="muted">Sem eventos ainda.</div>`;
+
+      const spinsEl = document.getElementById("spins");
+      spinsEl.innerHTML = data.spins.map(spinHtml).join("") || `<div class="muted">Sem spins ainda.</div>`;
+
+      const latestSignalEvent = data.events.find(e => e.type === "signal");
+      if (latestSignalEvent) {
+        const s = latestSignalEvent.payload;
+        document.getElementById("lastSignal").textContent =
+          `${s.strategy_name} → ${colorName(s.entry_color)}`;
+        document.getElementById("signalConfidence").textContent =
+          `Confiança: ${(s.confidence * 100).toFixed(1)}%`;
+        document.getElementById("signalGales").textContent =
+          `Gales: ${s.gales}`;
+        document.getElementById("signalPattern").textContent =
+          `Padrão: ${s.pattern.map(colorName).join(" > ")}`;
+      } else {
+        document.getElementById("lastSignal").textContent = "Nenhum sinal recente";
+        document.getElementById("signalConfidence").textContent = "Confiança: -";
+        document.getElementById("signalGales").textContent = "Gales: -";
+        document.getElementById("signalPattern").textContent = "Padrão: -";
+      }
+    }
+
+    async function sendSpin(color) {
+      await api("/api/spins/manual", {
+        method: "POST",
+        body: JSON.stringify({ color, source: "manual" })
+      });
+      refresh();
+    }
+
+    async function startDemo() {
+      await api("/api/feed/demo/start", { method: "POST" });
+      refresh();
+    }
+
+    async function stopDemo() {
+      await api("/api/feed/demo/stop", { method: "POST" });
+      refresh();
+    }
+
+    async function reloadStrategies() {
+      await api("/api/strategies/reload", { method: "POST" });
+      refresh();
+    }
+
+    refresh();
+    setInterval(refresh, 2000);
+  </script>
 </body>
 </html>
